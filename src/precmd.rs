@@ -17,7 +17,7 @@ fn render_git_status(repo: &Repository) -> Option<String> {
     let dirty = statuses
         .iter()
         .filter(|i| i.status() != git2::STATUS_CURRENT)
-        .all(|e| match e.status() {
+        .any(|e| match e.status() {
             s if s.contains(git2::STATUS_INDEX_NEW) => true,
             s if s.contains(git2::STATUS_INDEX_MODIFIED) => true,
             s if s.contains(git2::STATUS_INDEX_DELETED) => true,
