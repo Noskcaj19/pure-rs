@@ -1,0 +1,9 @@
+[package]
+authors = ["Noskcaj <kcajdev@gmail.com>"]
+name = "pure-rs"
+version = "0.1.0"
+
+[dependencies]
+clap = "2.27.1"
+colored = "1.6.0"
+git2 = "0.6.8"
