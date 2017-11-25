@@ -6,6 +6,7 @@ use clap::{App, AppSettings, Arg, SubCommand};
 
 
 mod prompt;
+mod precmd;
 
 fn main() {
     let matches = App::new("pure-rs")
@@ -22,6 +23,7 @@ fn main() {
 
     match matches.subcommand() {
         ("prompt", Some(sub_matches)) => prompt::render(sub_matches),
+        ("precmd", _) => precmd::render(),
         _ => (),
     }
 }
