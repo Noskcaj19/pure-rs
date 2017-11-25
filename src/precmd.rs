@@ -9,7 +9,31 @@ const INVALID_PATH: &'static str = "???";
 fn render_git_status(repo: &Repository) -> Option<String> {
     let shorthand: String = repo.head().unwrap().shorthand().unwrap().into();
 
-    Some(format!("{}", shorthand))
+    let mut opts = git2::StatusOptions::new();
+    opts.include_untracked(true);
+
+    let statuses = repo.statuses(Some(&mut opts)).unwrap();
+
+    let dirty = statuses
+        .iter()
+        .filter(|i| i.status() != git2::STATUS_CURRENT)
+        .all(|e| match e.status() {
+            s if s.contains(git2::STATUS_INDEX_NEW) => true,
+            s if s.contains(git2::STATUS_INDEX_MODIFIED) => true,
+            s if s.contains(git2::STATUS_INDEX_DELETED) => true,
+            s if s.contains(git2::STATUS_INDEX_RENAMED) => true,
+            s if s.contains(git2::STATUS_INDEX_TYPECHANGE) => true,
+            s if s.contains(git2::STATUS_WT_NEW) => true,
+            s if s.contains(git2::STATUS_WT_MODIFIED) => true,
+            s if s.contains(git2::STATUS_WT_DELETED) => true,
+            s if s.contains(git2::STATUS_WT_RENAMED) => true,
+            s if s.contains(git2::STATUS_WT_TYPECHANGE) => true,
+            _ => false,
+        });
+
+    let dirty_status = if dirty { "*" } else { "" };
+
+    Some(format!("{}{}", shorthand, dirty_status))
 }
 
 pub fn render() {
