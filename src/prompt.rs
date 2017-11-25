@@ -12,5 +12,5 @@ pub fn render(sub_matches: &ArgMatches) {
     } else {
         "❯".blue()
     };
-    print!("{}", prompt);
+    print!("{} ", prompt);
 }
